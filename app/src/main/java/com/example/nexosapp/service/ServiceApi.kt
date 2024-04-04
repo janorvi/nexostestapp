@@ -9,7 +9,7 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 interface ServiceApi {
     companion object{
-        const val BASE_URL = "http://192.168.1.14:8080/api/payments/"
+        const val BASE_URL = "http://10.0.2.2:8080/api/payments/"
     }
     @Headers("Authorization: Basic MDAwMTIzMDAwQUJD")
     @POST("authorization")

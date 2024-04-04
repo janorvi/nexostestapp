@@ -14,6 +14,7 @@ import com.example.nexosapp.model.Authorization
 import com.example.nexosapp.model.AuthorizationRequest
 import com.example.nexosapp.service.ServiceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,6 +32,8 @@ class MainViewModel @Inject constructor(serviceRepository: ServiceRepository, da
     val amount: LiveData<String> get() = _amount
     private val _cardNumber = MutableLiveData<String>("1234567890123456")
     val cardNumber: LiveData<String> get() = _cardNumber
+    private val _message = MutableLiveData<String>("")
+    val message: LiveData<String> get() = _message
 
 
     private val _authorizationId = MutableLiveData<String>()
@@ -112,12 +115,14 @@ class MainViewModel @Inject constructor(serviceRepository: ServiceRepository, da
                             authorizationResponse.statusDescription
                         )
                         databaseRepository?.insertAuthorization(authorization)?.let {
+                            _message.value = ""
                             onDismissDialog()
                         }
                     }
                 }
             }catch(e: Exception){
                 Log.i("sendAuthorizationError", e.message.toString())
+                _message.value = e.message.toString()
             }
         }
     }
@@ -128,6 +133,7 @@ class MainViewModel @Inject constructor(serviceRepository: ServiceRepository, da
                 serviceRepository?.cancelAuthorization(annulmentRequest)?.let{ annulmentResponse ->
                     if(annulmentResponse.statusCode == "00"){
                         databaseRepository?.updateAuthorizationStatusByReceiptId(annulmentRequest.receiptId, "Anulada")
+                        delay(500)
                         databaseRepository?.getAuthorizationsByStatus("Aprobada")
                     }
                 }

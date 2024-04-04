@@ -37,6 +37,7 @@ fun CustomDialog(
     val terminalCode: String by mainViewModel.terminalCode.observeAsState(initial = "000ABC")
     val amount: String by mainViewModel.amount.observeAsState(initial = "12345")
     val cardNumber: String by mainViewModel.cardNumber.observeAsState(initial = "1234567890123456")
+    val message: String by mainViewModel.message.observeAsState(initial = "")
 
     Dialog(
         onDismissRequest = {
@@ -137,6 +138,12 @@ fun CustomDialog(
                         )
                     }
                 }
+                Text(
+                    text = message,
+                    style = MaterialTheme.typography.h6,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }
